@@ -57,6 +57,7 @@ class BikeStationList extends Component{
                 </form>
                 
                 <hr/>
+
                 <table className="table">
                     <thead className="thead-dark">
                     <tr>
@@ -98,7 +99,6 @@ class BikeStationList extends Component{
         fetch(stationsInfoUrl)
             .then(results => {return results.json()})
             .then(jsonData => {
-                console.log(jsonData)
                 const stationsInfo = jsonData.data.stations
                 const currentStatus = this.state.allStatus
                 this.updateStatus( stationsInfo, currentStatus)
@@ -130,7 +130,6 @@ class BikeStationList extends Component{
             finishIndex: this.state.finishIndex,
             totalPages: totalPages
         })
-        console.log(this.state)
     }
 
     enterHover(id){
@@ -152,8 +151,10 @@ class BikeStationList extends Component{
     exitHover(){
         const stations = this.state.stations
         const allStatus = this.state.allStatus
+        const filteredStations = this.state.filteredStations
         this.setState({
             stations: stations,
+            filteredStations: filteredStations,
             allStatus: allStatus,
             currentStation : "",
             startIndex:this.state.startIndex,
@@ -165,6 +166,7 @@ class BikeStationList extends Component{
     gotoPage(event){
         const id = parseInt(event.target.value)
         const stations = this.state.stations
+        const filteredStations = this.state.filteredStations
         const allStatus = this.state.allStatus
 
         const startIndex = id * itemsByPage - 1;
@@ -172,6 +174,7 @@ class BikeStationList extends Component{
 
         this.setState({
             stations: stations,
+            filteredStations: filteredStations,
             allStatus: allStatus,
             currentStation : this.state.currentStation,
             startIndex: startIndex,
@@ -184,7 +187,7 @@ class BikeStationList extends Component{
         const stationSearch = event.target.value
 
         const stations = this.state.stations
-        const filteredStation = this.state.stations.filter(st => st.name.includes(stationSearch))
+        const filteredStation = this.state.stations.filter(st => st.name.toLowerCase().includes(stationSearch.toLowerCase()))
         const allStatus = this.state.allStatus
         const totalPages = filteredStation.length / itemsByPage 
 
